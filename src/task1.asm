@@ -19,6 +19,7 @@ segment .text
         mov [result], eax ; result = int1 + int2
 
         call print_int ; print result
+        call print_nl ; formatting line
 
         popa
 

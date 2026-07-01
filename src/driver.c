@@ -1,4 +1,4 @@
-int attribute ((cdecl)) asm_main( void );
+int asm_main( void );
 
 int main() {
   int ret_status;
