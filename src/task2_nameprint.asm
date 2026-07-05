@@ -26,7 +26,7 @@ asm_main:
 
     mov eax, Username ; stores the address of the Username variable (not the variable itself just where it is being kept)
     mov ecx, 25 ;limits username to 25 characters
-    call read_string ;reads and stores the user's username
+    call read_char ;reads and stores the user's username
 
     ; asks for, obtains, and stores print count number from user then stores the output in eax
     mov eax, WelcomeNmbr 

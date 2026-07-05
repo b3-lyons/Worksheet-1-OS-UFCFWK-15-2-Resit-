@@ -8,9 +8,9 @@ segment .bss
 
 
 segment .text
-    global asm_main_array
+    global asm_main
 
-asm_main_array:
+asm_main:
     enter 0,0 ;enters a stack frame to run code
 
     mov ecx, 0 ; sets the starting value position of the array (the ecx register tracks the current index position as the loop runs)
