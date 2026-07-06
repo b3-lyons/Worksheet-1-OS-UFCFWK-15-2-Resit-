@@ -20,13 +20,25 @@ segment .text
 asm_main:
     enter 0,0
 
-    ; get and read username
+    ;displays input prompt via terminal
     mov eax, InputName
     call print_string
 
-    mov eax, Username ; stores the address of the Username variable (not the variable itself just where it is being kept)
-    mov ecx, 25 ;limits username to 25 characters
-    call read_char ;reads and stores the user's username
+    mov ebx, Username ;points to where characters will be stored 
+    mov ecx, 25 ;sets limit to 25 characters
+
+ReadName:
+    call read_char ;reads user input character
+
+    cmp al, 10 ;ascii character 10 is the enter key, if the user presses enter after theyve typed their name...
+    je DoneName ;then the process jumps to the DoneName label
+
+    mov [ebx], al ;move the character from al reg into ebx reg 
+    inc ebx ;increments position in ebx by 1 so previous character isnt overwritten
+    jmp ReadName ;jumps to ReadName (re-runs the loop until enter is pressed)
+
+DoneName:
+    mov byte [ebx], 0 ;adds a 0 to the end of the string to mark its end
 
     ; asks for, obtains, and stores print count number from user then stores the output in eax
     mov eax, WelcomeNmbr 
@@ -61,7 +73,9 @@ Error:
     mov eax, ErrorMsg ;if the number is invalid moves error msg into eax
     call print_string ;prints errors from eax
     call print_nl ;format new line
+    leave
     ret ;return
 
 LoopDone:
+    leave ;leave stack
     ret ;return
