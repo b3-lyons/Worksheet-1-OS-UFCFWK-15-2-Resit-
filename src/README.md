@@ -148,14 +148,16 @@ This then outputs the sum of the users specified range.
 Task 3 required that I create a makefile to make the process of building the task files faster and easier. 
 
 In order to build all of the task files with one command, I created a target called "all".
-```
+
+```makefile
 all: task1 task1.2 task2_nameprint task2_arraysum task2_arrayrange
 ```
+
 This prevents the need to manually build each tasks executable files individually.
 
 The makefile also contains individual targets for each task, so if needed each executable can be built on its own. These targets consist of the build commands from tasks 1 and 1.2 but modified for every task.
 
-```
+```makefile
 #task 2 part 2 build commands
 task2_arraysum: task2_arraysum.o driver.o asm_io.o
 	gcc -m32 -o task2_arraysum task2_arraysum.o driver.o asm_io.o
@@ -165,7 +167,7 @@ task2_arraysum.o: task2_arraysum.asm
 
 An object wiper target is also used to reset build files and executables if the need to be rebuilt.
 
-```
+```makefile
 ObjectWipe:
 	rm -f *.o task1 task1.2 task2_nameprint task2_arraysum task2_arrayrange 
 ```
