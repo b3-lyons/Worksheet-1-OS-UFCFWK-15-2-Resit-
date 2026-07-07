@@ -2,10 +2,20 @@
 
 # Operating Systems Worksheet 1:
 
-### Build Commands:
+### Build/Run Commands:
+
+To build all tasks
 ```
 make all
+```
 
+To build each task individually
+```
+make FILENAME
+```
+
+To run each task
+```
 ./FILENAME
 ```
 
@@ -36,11 +46,11 @@ gcc -m32 driver.o task1.2.o asm_io.o -o task1.2
 
 Running these provided me with all the relevant object and executable files for task 1.2.
 
-IMAGE t1_2_1
+![commands](images/t1_2_1.png) 
 
 I was then able to run the task 1.2 executable to calculate the sum of 8 and 5.
 
-IMAGE t1_2_2
+![8 5 sum](images/t1_2_2.png)
 
 
 ### Task 2.1:
@@ -48,8 +58,7 @@ The goal of this task was to create an assembly program which printed out a welc
 
 For this to work the program starts by prompting the user to enter their name, then by asking how many times they want the welcome message to be printed.
 
-IMAGE t2_1
-
+![welcome prompt](images/t2_1_2.png) 
 Using the user inputs, the program uses a stack frame, loops, and various CPU registers like "eax", "ebc", and "ecx" to store and process the entered data.
 
 ```nasm
@@ -73,7 +82,7 @@ The user's data is then checked to be valid (number has to be within 50 to 100) 
 
 If this information is valid then a message saying "Welcome {username}" will print the specified amount between 50 and 100.
 
-IMAGE t2_1_2
+![welcome output](images/t2_1.png) 
 
 
 ### Task 2.2:
@@ -97,11 +106,66 @@ Once complete, a new loop adds up each number of the array 1 at a time until it 
 
 The final sum is then printed to the terminal.
 
-IMAGE t2_2
+![sum output](images/t2_2.png) 
 
 
 ### Task 2.3:
-For task 2.3 the previous program had to be adapted to use user input when determining the range. This meant that new labels and loops had to be created so that the array was dynamic.
+For task 2.3 the previous program had to be adapted to use user input when determining the range. This meant that new labels and loops had to be created so that the array was dynamic and could work for any range between 1 and 100.
+
+Both the start and end range values are taken from the user via terminal prompts where they are then validated and calculated into the output number.
+
+```nasm
+mov eax, EndPrompt ;prompt displayed to user
+call print_string
+```
+
+```nasm
+call read_int ;user integer gets read
+mov [EndRange], eax
+```
+
+```nasm
+mov eax, [EndRange] ;integer validated
+cmp eax, 100
+jg RangeInvalid
+```
+
+```nasm
+add eax, [Array + ecx*4] ;adds up all values from array (stored in ram)
+```
+
+```nasm
+add ecx, 1 ;goes up by 1 every iteration till end number is reached
+```
+
+This then outputs the sum of the users specified range.
+
+![sum output](images/t2_3.png) 
 
 
+### Task 3:
 
+Task 3 required that I create a makefile to make the process of building the task files faster and easier. 
+
+In order to build all of the task files with one command, I created a target called "all".
+```
+all: task1 task1.2 task2_nameprint task2_arraysum task2_arrayrange
+```
+This prevents the need to manually build each tasks executable files individually.
+
+The makefile also contains individual targets for each task, so if needed each executable can be built on its own. These targets consist of the build commands from tasks 1 and 1.2 but modified for every task.
+
+```
+#task 2 part 2 build commands
+task2_arraysum: task2_arraysum.o driver.o asm_io.o
+	gcc -m32 -o task2_arraysum task2_arraysum.o driver.o asm_io.o
+task2_arraysum.o: task2_arraysum.asm
+	nasm -f elf32 task2_arraysum.asm -o task2_arraysum.o
+```
+
+An object wiper target is also used to reset build files and executables if the need to be rebuilt.
+
+```
+ObjectWipe:
+	rm -f *.o task1 task1.2 task2_nameprint task2_arraysum task2_arrayrange 
+```

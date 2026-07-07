@@ -44,7 +44,7 @@ RangeInput:
     call print_string
     call read_int 
     mov [EndRange], eax 
-
+    
 
     mov eax, [StartRange] ;checks if start number is valid (higher than 1)
     cmp eax, 1
@@ -68,7 +68,6 @@ RangeInput:
     mov [EndRange], eax
 
 
-    ; Prepare for summing
     mov ecx, [StartRange] ;loads start index number into ecx reg
     mov eax, 0 ;resets the value so sum doesnt get miscalulated
 
